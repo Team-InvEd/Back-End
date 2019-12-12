@@ -3,8 +3,8 @@ const Schema = mongoose.Schema;
 
 const transactionSchema = new Schema(
   {
-    user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-    fund: { type: mongoose.Schema.Types.ObjectId, ref: "Fund" },
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+    fundId: { type: mongoose.Schema.Types.ObjectId, ref: "Fund" },
     amount: Number
   },
   {
