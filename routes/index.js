@@ -1,4 +1,5 @@
 const router = require("express").Router();
+const Fund = require("../models/Fund");
 
 router.get("/", (req, res, next) => {
   res.status(200).json({ msg: "Working" });
@@ -11,17 +12,23 @@ router.get("/donate", async (req, res, next) => {
     next(err);
   }
 });
-
-router.post('/fund', (req, res, next) => {
-  const { user, title, description, amount  } = req.body;
-  const newFund = new Fund({ user, title, description, amount })
-  newFund.save()
-  .then((fund) => {
-    res.redirect('/fund/:id');
-  })
-  .catch((error) => {
-    console.log(error);
-  })
+router.get("/fund", async (req, res, next) => {
+  try {
+    res.json({ msg: "fund message from the API." });
+  } catch (err) {
+    next(err);
+  }
 });
 
+router.post("/fund", async (req, res, next) => {
+  const { title, description, amount } = req.body;
+  const user = req.user;
+  try {
+    const newFund = new Fund({ user, title, description, amount });
+    newFund.save();
+    res.json(newFund);
+  } catch (error) {
+    console.log(error);
+  }
+});
 module.exports = router;
