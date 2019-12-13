@@ -2,7 +2,7 @@ const router = require("express").Router();
 const Fund = require("../models/Fund");
 const Transaction = require("../models/Transaction");
 const theInStates = require("./api/states.json");
-const theOutStates = require("./api/out-states.json")
+const theOutStates = require("./api/out-states.json");
 
 router.get("/", (req, res, next) => {
   res.status(200).json({ msg: "Working" });
@@ -28,22 +28,32 @@ router.post("/donate", async (req, res, next) => {
 });
 router.get("/api/states", async (req, res, next) => {
   try {
-    res.json(theInStates)
+    res.json(theInStates);
   } catch (err) {
-    next(err)
+    next(err);
   }
-})
+});
 router.get("/api/out-states", async (req, res, next) => {
   try {
-    res.json(theOutStates)
+    res.json(theOutStates);
   } catch (err) {
-    next(err)
+    next(err);
   }
-})
+});
 router.get("/donate", async (req, res, next) => {
   try {
     theFunds = await Fund.find();
     res.json({ theFunds });
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.get("/myStuff", isAuth, async (req, res, next) => {
+  try {
+    theFunds = await Fund.find({ user: req.user._id });
+    theTransactions = await Transaction.find({ userId: req.user._id });
+    res.json({ theFunds, theTransactions });
   } catch (err) {
     next(err);
   }
@@ -57,9 +67,9 @@ router.get("/fund", async (req, res, next) => {
   }
 });
 
-router.post("/fund", async (req, res, next) => {
+router.post("/fund", isAuth, async (req, res, next) => {
   const { title, description, amount } = req.body;
-  const user = req.user;
+  const user = req.user._id;
   try {
     const newFund = new Fund({ user, title, description, amount });
     newFund.save();
@@ -68,4 +78,10 @@ router.post("/fund", async (req, res, next) => {
     console.log(error);
   }
 });
+
+function isAuth(req, res, next) {
+  req.isAuthenticated()
+    ? next()
+    : res.status(401).json({ msg: "Log in first" });
+}
 module.exports = router;
