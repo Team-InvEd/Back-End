@@ -1,6 +1,8 @@
 const router = require("express").Router();
 const Fund = require("../models/Fund");
 const Transaction = require("../models/Transaction");
+const theInStates = require("./api/states.json");
+const theOutStates = require("./api/out-states.json")
 
 router.get("/", (req, res, next) => {
   res.status(200).json({ msg: "Working" });
@@ -24,6 +26,20 @@ router.post("/donate", async (req, res, next) => {
     next(error);
   }
 });
+router.get("/api/states", async (req, res, next) => {
+  try {
+    res.json(theInStates)
+  } catch (err) {
+    next(err)
+  }
+})
+router.get("/api/out-states", async (req, res, next) => {
+  try {
+    res.json(theOutStates)
+  } catch (err) {
+    next(err)
+  }
+})
 router.get("/donate", async (req, res, next) => {
   try {
     theFunds = await Fund.find();
