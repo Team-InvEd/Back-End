@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const Fund = require("../models/Fund");
+const User = require("../models/User");
 const Transaction = require("../models/Transaction");
 const theInStates = require("./api/states.json");
 const theOutStates = require("./api/out-states.json");
@@ -19,15 +20,33 @@ router.get("/funds", async (req, res, next) => {
 router.get("/api/transactions", async (req, res, next) => {
   try {
     theT = await Transaction.find().populate("userId");
-    res.json({ theT });
+    res.json({
+      theT
+    });
+  } catch (err) {
+    next(err);
+  }
+});
+router.get("/api/users", async (req, res, next) => {
+  try {
+    theU = await User.find();
+    res.json({
+      theU
+    });
   } catch (err) {
     next(err);
   }
 });
 router.post("/donate", async (req, res, next) => {
-  const { amount, userId, fundId, comment } = req.body;
+  const { amount, userId, userName, fundId, comment } = req.body;
   try {
-    const newTransaction = new Transaction({ amount, userId, fundId, comment });
+    const newTransaction = new Transaction({
+      amount,
+      userId,
+      userName,
+      fundId,
+      comment
+    });
     newTransaction.save();
     res.json(newTransaction);
   } catch (error) {
@@ -79,9 +98,10 @@ router.get("/fund", async (req, res, next) => {
 
 router.post("/fund", isAuth, async (req, res, next) => {
   const { title, description, amount } = req.body;
-  const user = req.user._id;
+  const userId = req.user._id;
+  const userName = req.user.name;
   try {
-    const newFund = new Fund({ user, title, description, amount });
+    const newFund = new Fund({ userId, userName, title, description, amount });
     newFund.save();
     res.json(newFund);
   } catch (error) {

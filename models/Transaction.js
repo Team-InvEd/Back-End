@@ -4,6 +4,7 @@ const Schema = mongoose.Schema;
 const transactionSchema = new Schema(
   {
     userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+    // userName: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
     fundId: { type: mongoose.Schema.Types.ObjectId, ref: "Fund" },
     amount: Number,
     comment: String
