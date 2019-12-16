@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const Fund = require("../models/Fund");
+const User = require("../models/User")
 const Transaction = require("../models/Transaction");
 const theInStates = require("./api/states.json");
 const theOutStates = require("./api/out-states.json");
@@ -18,7 +19,7 @@ router.get("/funds", async (req, res, next) => {
 });
 router.get("/api/transactions", async (req, res, next) => {
   try {
-    theT = await Transaction.find();
+    theT = await Transaction.find().populate("userId")
     res.json({
       theT
     });
@@ -26,10 +27,21 @@ router.get("/api/transactions", async (req, res, next) => {
     next(err);
   }
 });
-router.post("/donate", async (req, res, next) => {
-  const { amount, userId, fundId, comment } = req.body;
+router.get("/api/users", async (req, res, next) => {
   try {
-    const newTransaction = new Transaction({ amount, userId, fundId, comment });
+    theU = await User.find();
+    res.json({
+      theU
+    }
+    );
+  } catch (err) {
+    next(err);
+  }
+});
+router.post("/donate", async (req, res, next) => {
+  const { amount, userId, userName, fundId, comment } = req.body;
+  try {
+    const newTransaction = new Transaction({ amount, userId, userName, fundId, comment });
     newTransaction.save();
     res.json(newTransaction);
   } catch (error) {
@@ -62,7 +74,7 @@ router.get("/donate", async (req, res, next) => {
 router.get("/myStuff", isAuth, async (req, res, next) => {
   try {
     theFunds = await Fund.find({ user: req.user._id });
-    theTransactions = await Transaction.find({ userId: req.user._id });
+    theTransactions = await Transaction.find({ userId: req.user._id }).populate("fundId");
     res.json({ theFunds, theTransactions });
   } catch (err) {
     next(err);
@@ -79,9 +91,10 @@ router.get("/fund", async (req, res, next) => {
 
 router.post("/fund", isAuth, async (req, res, next) => {
   const { title, description, amount } = req.body;
-  const user = req.user._id;
+  const userId = req.user._id;
+  const userName = req.user.name;
   try {
-    const newFund = new Fund({ user, title, description, amount });
+    const newFund = new Fund({ userId, userName, title, description, amount });
     newFund.save();
     res.json(newFund);
   } catch (error) {
