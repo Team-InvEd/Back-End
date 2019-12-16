@@ -80,6 +80,7 @@ router.get("/myStuff", isAuth, async (req, res, next) => {
   // console.log(req.user._id)
   try {
     theFunds = await Fund.find({ userId: req.user._id });
+    console.log(theFunds, req.user._id);
     theTransactions = await Transaction.find({ userId: req.user._id }).populate(
       "fundId"
     );
