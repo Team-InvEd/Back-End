@@ -11,7 +11,7 @@ router.get("/", (req, res, next) => {
 
 router.get("/funds", async (req, res, next) => {
   try {
-    theFunds = await Fund.find();
+    theFunds = await Fund.find().populate('userId');
     res.json({ theFunds });
   } catch (err) {
     next(err);
@@ -78,7 +78,8 @@ router.get("/donate", async (req, res, next) => {
 
 router.get("/myStuff", isAuth, async (req, res, next) => {
   try {
-    theFunds = await Fund.find({ user: req.user._id });
+    theFunds = await Fund.find({ userId: req.user._id });
+    console.log(theFunds, req.user._id);
     theTransactions = await Transaction.find({ userId: req.user._id }).populate(
       "fundId"
     );
