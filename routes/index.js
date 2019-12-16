@@ -73,7 +73,7 @@ router.get("/donate", async (req, res, next) => {
 
 router.get("/myStuff", isAuth, async (req, res, next) => {
   try {
-    theFunds = await Fund.find({ user: req.user._id });
+    theFunds = await Fund.find({ userId: req.user._id });
     theTransactions = await Transaction.find({ userId: req.user._id }).populate("fundId");
     res.json({ theFunds, theTransactions });
   } catch (err) {
@@ -92,9 +92,9 @@ router.get("/fund", async (req, res, next) => {
 router.post("/fund", isAuth, async (req, res, next) => {
   const { title, description, amount } = req.body;
   const userId = req.user._id;
-  const userName = req.user.name;
+  const creator = re.user.name;
   try {
-    const newFund = new Fund({ userId, userName, title, description, amount });
+    const newFund = new Fund({ userId, title, description, amount, creator });
     newFund.save();
     res.json(newFund);
   } catch (error) {
