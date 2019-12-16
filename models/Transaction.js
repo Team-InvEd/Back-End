@@ -5,7 +5,8 @@ const transactionSchema = new Schema(
   {
     userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
     fundId: { type: mongoose.Schema.Types.ObjectId, ref: "Fund" },
-    amount: Number
+    amount: Number,
+    comment: String
   },
   {
     timestamps: true

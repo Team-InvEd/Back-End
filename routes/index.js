@@ -16,10 +16,20 @@ router.get("/funds", async (req, res, next) => {
     next(err);
   }
 });
-router.post("/donate", async (req, res, next) => {
-  const { amount, userId, fundId } = req.body;
+router.get("/api/transactions", async (req, res, next) => {
   try {
-    const newTransaction = new Transaction({ amount, userId, fundId });
+    theT = await Transaction.find();
+    res.json({
+      theT
+    });
+  } catch (err) {
+    next(err);
+  }
+});
+router.post("/donate", async (req, res, next) => {
+  const { amount, userId, fundId, comment } = req.body;
+  try {
+    const newTransaction = new Transaction({ amount, userId, fundId, comment });
     newTransaction.save();
     res.json(newTransaction);
   } catch (error) {
@@ -82,6 +92,6 @@ router.post("/fund", isAuth, async (req, res, next) => {
 function isAuth(req, res, next) {
   req.isAuthenticated()
     ? next()
-    : res.status(401).json({ msg: "Log in first" });
+    : res.status(401).json({ msg: "User is not currently logged in." });
 }
 module.exports = router;
