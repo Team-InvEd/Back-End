@@ -4,20 +4,19 @@ const User = require("../models/User");
 const Transaction = require("../models/Transaction");
 const theInStates = require("./api/states.json");
 const theOutStates = require("./api/out-states.json");
-const uploader = require('../config/cloudinary-setup');
+const uploader = require("../config/cloudinary-setup");
 
-router.post('/api/upload', uploader.single("imageUrl"), (req, res, next) => {
+router.post("/api/upload", uploader.single("imageUrl"), (req, res, next) => {
   // console.log('file is: ', req.file)
 
   if (!req.file) {
-    next(new Error('No file uploaded!'));
+    next(new Error("No file uploaded!"));
     return;
   }
-  // get secure_url from the file object and save it in the 
+  // get secure_url from the file object and save it in the
   // variable 'secure_url', but this can be any name, just make sure you remember to use the same in frontend
   res.json({ secure_url: req.file.secure_url });
-})
-
+});
 
 router.get("/", (req, res, next) => {
   res.status(200).json({ msg: "Working" });
@@ -117,7 +116,14 @@ router.post("/fund", isAuth, async (req, res, next) => {
   const userId = req.user._id;
   const userName = req.user.name;
   try {
-    const newFund = new Fund({ userId, userName, title, description, amount, imageUrl });
+    const newFund = new Fund({
+      userId,
+      userName,
+      title,
+      description,
+      amount,
+      imageUrl
+    });
     newFund.save();
     res.json(newFund);
   } catch (error) {
