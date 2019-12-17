@@ -7,7 +7,8 @@ const fundSchema = new Schema(
     userName: String,
     title: String,
     description: String,
-    amount: Number
+    amount: Number,
+    imageUrl: String
   },
   {
     timestamps: true
