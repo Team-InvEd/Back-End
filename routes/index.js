@@ -7,11 +7,9 @@ const theOutStates = require("./api/out-states.json");
 const uploader = require("../config/cloudinary-setup");
 const stripe = require("stripe")("sk_test_Xdnh7CVko2Jm1U8ViAFYfzBm00jXBYx46C");
 
-
 stripe.charges.retrieve("ch_1FqLXYCnwTOupfQYXNQAxoAA", {
   api_key: "sk_test_Xdnh7CVko2Jm1U8ViAFYfzBm00jXBYx46C"
 });
-
 
 router.post("/api/upload", uploader.single("imageUrl"), (req, res, next) => {
   // console.log('file is: ', req.file)
@@ -135,6 +133,15 @@ router.post("/fund", isAuth, async (req, res, next) => {
     res.json(newFund);
   } catch (error) {
     console.log(error);
+  }
+});
+
+router.post("/fund/delete", isAuth, async (req, res, next) => {
+  try {
+    let x = await Fund.findByIdAndRemove(req.body.id);
+    res.json(x);
+  } catch (err) {
+    next(err);
   }
 });
 
