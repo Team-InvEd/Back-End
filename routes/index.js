@@ -138,6 +138,10 @@ router.post("/fund", isAuth, async (req, res, next) => {
   }
 });
 
+router.post("/calculations", async (req, res, next)=>{
+  
+})
+
 function isAuth(req, res, next) {
   req.isAuthenticated()
     ? next()
