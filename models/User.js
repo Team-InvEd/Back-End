@@ -5,6 +5,9 @@ const userSchema = new Schema(
   {
     email: String,
     name: String,
+    inState: Number,
+    outState: Number,
+    private: Number
   },
   {
     timestamps: true,

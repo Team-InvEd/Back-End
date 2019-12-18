@@ -7,11 +7,9 @@ const theOutStates = require("./api/out-states.json");
 const uploader = require("../config/cloudinary-setup");
 const stripe = require("stripe")("sk_test_Xdnh7CVko2Jm1U8ViAFYfzBm00jXBYx46C");
 
-
 stripe.charges.retrieve("ch_1FqLXYCnwTOupfQYXNQAxoAA", {
   api_key: "sk_test_Xdnh7CVko2Jm1U8ViAFYfzBm00jXBYx46C"
 });
-
 
 router.post("/api/upload", uploader.single("imageUrl"), (req, res, next) => {
   // console.log('file is: ', req.file)
@@ -118,6 +116,7 @@ router.get("/fund", async (req, res, next) => {
   }
 });
 
+
 router.post("/fund", isAuth, async (req, res, next) => {
   const { title, description, amount, imageUrl } = req.body;
   const userId = req.user._id;
@@ -138,9 +137,25 @@ router.post("/fund", isAuth, async (req, res, next) => {
   }
 });
 
-router.post("/calculations", async (req, res, next)=>{
-  
-})
+router.post("/fund/delete", isAuth, async (req, res, next) => {
+  try {
+    let x = await Fund.findByIdAndRemove(req.body.id);
+    res.json(x);
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.post("/user", isAuth, async (req, res, next) => {
+  const id = user._id
+  const { inState, outState, priv } = req.body.id
+  try {
+    let x = await User.findByIdAndUpdate({ inState, outState, priv });
+    res.json(x);
+  } catch (err) {
+    next(err);
+  }
+});
 
 function isAuth(req, res, next) {
   req.isAuthenticated()
