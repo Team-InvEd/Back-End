@@ -155,7 +155,7 @@ router.post("/user", isAuth, async (req, res, next) => {
   const id = req.user._id
   const { calculations } = req.body
   try {
-    let x = await User.findByIdAndUpdate(id, { calculations });
+    let x = await User.findByIdAndUpdate(id, { calculations }, {new:true});
     res.json(x)
   } catch (err) {
     next(err);
