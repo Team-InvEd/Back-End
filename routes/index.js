@@ -146,14 +146,16 @@ router.post("/fund/delete", isAuth, async (req, res, next) => {
   }
 });
 
+
 router.post("/user", isAuth, async (req, res, next) => {
-  const id = user._id
-  const { inState, outState, priv } = req.body.id
+  const id = req.user._id
+  const { calculations } = req.body
   try {
-    let x = await User.findByIdAndUpdate({ inState, outState, priv });
-    res.json(x);
+    let x = await User.findByIdAndUpdate(id, { calculations });
+    res.json(x)
   } catch (err) {
     next(err);
+    res.json({err})
   }
 });
 
