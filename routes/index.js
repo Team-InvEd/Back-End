@@ -129,10 +129,14 @@ router.post("/fund", isAuth, async (req, res, next) => {
       amount,
       imageUrl
     });
-    newFund.save();
-    res.json(newFund);
+    newFund.save((err, doc) => {
+      if (!err) {
+        res.json(doc);
+      }
+      throw err;
+    });
   } catch (error) {
-    console.log(error);
+    res.json({ error });
   }
 });
 
