@@ -116,6 +116,7 @@ router.get("/fund", async (req, res, next) => {
   }
 });
 
+
 router.post("/fund", isAuth, async (req, res, next) => {
   const { title, description, amount, imageUrl } = req.body;
   const userId = req.user._id;
@@ -143,6 +144,17 @@ router.post("/fund", isAuth, async (req, res, next) => {
 router.post("/fund/delete", isAuth, async (req, res, next) => {
   try {
     let x = await Fund.findByIdAndRemove(req.body.id);
+    res.json(x);
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.post("/user", isAuth, async (req, res, next) => {
+  const id = user._id
+  const { inState, outState, priv } = req.body.id
+  try {
+    let x = await User.findByIdAndUpdate({ inState, outState, priv });
     res.json(x);
   } catch (err) {
     next(err);
