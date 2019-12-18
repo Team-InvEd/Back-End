@@ -5,9 +5,9 @@ const fundSchema = new Schema(
   {
     userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
     userName: String,
-    title: String,
-    description: String,
-    amount: Number,
+    title: { type: String, required: true },
+    description: { type: String, required: true },
+    amount: { type: Number, required: true, default: 0 },
     imageUrl: String
   },
   {
