@@ -118,6 +118,7 @@ router.get("/fund", async (req, res, next) => {
 
 
 router.post("/fund", isAuth, async (req, res, next) => {
+  console.log(req.body, '9090909')
   const { title, description, amount, imageUrl } = req.body;
   const userId = req.user._id;
   const userName = req.user.name;
@@ -132,9 +133,10 @@ router.post("/fund", isAuth, async (req, res, next) => {
     });
     newFund.save((err, doc) => {
       if (!err) {
-        res.json(doc);
+        return res.json(doc);
       }
-      throw err;
+      console.log(error,'err')
+      //throw err;
     });
   } catch (error) {
     res.json({ error });
