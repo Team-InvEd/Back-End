@@ -5,14 +5,10 @@ const Transaction = require("../models/Transaction");
 const theInStates = require("./api/states.json");
 const theOutStates = require("./api/out-states.json");
 const uploader = require("../config/cloudinary-setup");
-const stripe = require("stripe")("sk_test_Xdnh7CVko2Jm1U8ViAFYfzBm00jXBYx46C");
 
-stripe.charges.retrieve("ch_1FqLXYCnwTOupfQYXNQAxoAA", {
-  api_key: "sk_test_Xdnh7CVko2Jm1U8ViAFYfzBm00jXBYx46C"
-});
 
 router.post("/api/upload", uploader.single("imageUrl"), (req, res, next) => {
-  // console.log('file is: ', req.file)
+  console.log('file is: ', req.file)
 
   if (!req.file) {
     next(new Error("No file uploaded!"));

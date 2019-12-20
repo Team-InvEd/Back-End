@@ -22,15 +22,19 @@ const app_name = require('./package.json').name;
 const debug = require('debug')(`${app_name}:${path.basename(__filename).split('.')[0]}`);
 const app = express();
 
-app.use(
-  cors({
-    credentials: true,
-    //origin: [process.env.FRONTENDPOINT]
-    origin: function(origin, callback){
-      return callback(null, true);
-    },
-  })
-);
+// app.use(
+//   cors({
+//     credentials: true,
+//     //origin: [process.env.FRONTENDPOINT]
+//     origin: function(origin, callback){
+//       return callback(null, true);
+//     },
+//   })
+// );
+
+
+app.use(cors())
+
 
 app.use(
   session({
